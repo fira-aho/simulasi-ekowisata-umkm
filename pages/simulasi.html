@@ -37,46 +37,10 @@
     <a href="../index.html">← Kembali ke Menu Utama</a>
   </main>
 
-  <!-- Script -->
-  <script>
-    function ambilProduk() {
-      return JSON.parse(localStorage.getItem("produkUMKM")) || [];
-    }
-
-    function formatRupiah(angka) {
-      return "Rp " + angka.toLocaleString("id-ID");
-    }
-
-    document.getElementById("simulasiForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const pengunjung = parseInt(jumlahPengunjung.value);
-      const tiket = parseInt(hargaTiket.value);
-      const sponsor = parseInt(danaSponsor.value);
-      const biaya = parseInt(biayaOperasional.value);
-
-      const pendapatanTiket = pengunjung * tiket;
-      const totalPendapatan = pendapatanTiket + sponsor;
-
-      const produkList = ambilProduk();
-      let totalOmzetUMKM = 0;
-
-      produkList.forEach(produk => {
-        const estimasiTerjual = Math.floor(pengunjung * 0.3);
-        totalOmzetUMKM += estimasiTerjual * produk.harga;
-      });
-
-      const hasilHTML = `
-        <p><strong>Pendapatan Tiket:</strong> ${formatRupiah(pendapatanTiket)}</p>
-        <p><strong>Dana Sponsor:</strong> ${formatRupiah(sponsor)}</p>
-        <p><strong>Total Pendapatan:</strong> ${formatRupiah(totalPendapatan)}</p>
-        <p><strong>Biaya Operasional:</strong> ${formatRupiah(biaya)}</p>
-        <p><strong>Estimasi Omzet UMKM:</strong> ${formatRupiah(totalOmzetUMKM)}</p>
-      `;
-
-      document.getElementById("hasilSimulasi").innerHTML = hasilHTML;
-    });
-  </script>
+  <!-- Scripts -->
+  <script src="../assets/js/storage.js"></script>
+  <script src="../assets/js/simulasi.js"></script>
+  <script src="../assets/js/main.js"></script>
 
 </body>
 </html>

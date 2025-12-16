@@ -47,65 +47,10 @@
     <a href="../index.html">← Kembali ke Menu Utama</a>
   </main>
 
-  <!-- Script -->
-  <script>
-    const form = document.getElementById("produkForm");
-    const tabelProduk = document.getElementById("tabelProduk");
-
-    function ambilProduk() {
-      return JSON.parse(localStorage.getItem("produkUMKM")) || [];
-    }
-
-    function simpanProduk(data) {
-      localStorage.setItem("produkUMKM", JSON.stringify(data));
-    }
-
-    function renderTabel() {
-      const produkList = ambilProduk();
-      tabelProduk.innerHTML = "";
-
-      produkList.forEach((produk, index) => {
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-          <td>${produk.nama}</td>
-          <td>${produk.kategori}</td>
-          <td>${produk.harga}</td>
-          <td>${produk.deskripsi}</td>
-          <td><button onclick="hapusProduk(${index})">Hapus</button></td>
-        `;
-
-        tabelProduk.appendChild(row);
-      });
-    }
-
-    function hapusProduk(index) {
-      const produkList = ambilProduk();
-      produkList.splice(index, 1);
-      simpanProduk(produkList);
-      renderTabel();
-    }
-
-    form.addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const produkBaru = {
-        nama: namaProduk.value,
-        kategori: kategoriProduk.value,
-        harga: hargaProduk.value,
-        deskripsi: deskripsiProduk.value
-      };
-
-      const produkList = ambilProduk();
-      produkList.push(produkBaru);
-      simpanProduk(produkList);
-
-      form.reset();
-      renderTabel();
-    });
-
-    renderTabel();
-  </script>
+  <!-- Scripts -->
+  <script src="../assets/js/storage.js"></script>
+  <script src="../assets/js/produk.js"></script>
+  <script src="../assets/js/main.js"></script>
 
 </body>
 </html>
