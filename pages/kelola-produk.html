@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kelola Data UMKM</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>Kelola Data Produk UMKM</h1>
+    <p>Manajemen data produk UMKM desa</p>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section>
+      <h2>Tambah Produk UMKM</h2>
+
+      <form id="produkForm">
+        <input type="text" id="namaProduk" placeholder="Nama Produk" required>
+        <input type="text" id="kategoriProduk" placeholder="Kategori Produk" required>
+        <input type="number" id="hargaProduk" placeholder="Harga Satuan" required>
+        <textarea id="deskripsiProduk" placeholder="Deskripsi Produk"></textarea>
+        <button type="submit">Simpan Produk</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Daftar Produk UMKM</h2>
+
+      <table border="1" width="100%" cellpadding="8">
+        <thead>
+          <tr>
+            <th>Nama Produk</th>
+            <th>Kategori</th>
+            <th>Harga</th>
+            <th>Deskripsi</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tabelProduk"></tbody>
+      </table>
+    </section>
+
+    <a href="../index.html">← Kembali ke Menu Utama</a>
+  </main>
+
+  <!-- Script -->
+  <script>
+    const form = document.getElementById("produkForm");
+    const tabelProduk = document.getElementById("tabelProduk");
+
+    function ambilProduk() {
+      return JSON.parse(localStorage.getItem("produkUMKM")) || [];
+    }
+
+    function simpanProduk(data) {
+      localStorage.setItem("produkUMKM", JSON.stringify(data));
+    }
+
+    function renderTabel() {
+      const produkList = ambilProduk();
+      tabelProduk.innerHTML = "";
+
+      produkList.forEach((produk, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${produk.nama}</td>
+          <td>${produk.kategori}</td>
+          <td>${produk.harga}</td>
+          <td>${produk.deskripsi}</td>
+          <td><button onclick="hapusProduk(${index})">Hapus</button></td>
+        `;
+
+        tabelProduk.appendChild(row);
+      });
+    }
+
+    function hapusProduk(index) {
+      const produkList = ambilProduk();
+      produkList.splice(index, 1);
+      simpanProduk(produkList);
+      renderTabel();
+    }
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const produkBaru = {
+        nama: namaProduk.value,
+        kategori: kategoriProduk.value,
+        harga: hargaProduk.value,
+        deskripsi: deskripsiProduk.value
+      };
+
+      const produkList = ambilProduk();
+      produkList.push(produkBaru);
+      simpanProduk(produkList);
+
+      form.reset();
+      renderTabel();
+    });
+
+    renderTabel();
+  </script>
+
+</body>
+</html>
