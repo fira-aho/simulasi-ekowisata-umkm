@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulasi Kegiatan</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>Simulasi Kegiatan Ekowisata</h1>
+    <p>Simulasi anggaran dan dampak ekonomi UMKM</p>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section>
+      <h2>Input Variabel Acara</h2>
+
+      <form id="simulasiForm">
+        <input type="number" id="jumlahPengunjung" placeholder="Jumlah Pengunjung" required>
+        <input type="number" id="hargaTiket" placeholder="Harga Tiket" required>
+        <input type="number" id="danaSponsor" placeholder="Dana Sponsor" required>
+        <input type="number" id="biayaOperasional" placeholder="Biaya Operasional" required>
+        <button type="submit">Jalankan Simulasi</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Hasil Simulasi</h2>
+      <div id="hasilSimulasi">
+        <p>Silakan jalankan simulasi untuk melihat hasil.</p>
+      </div>
+    </section>
+
+    <a href="../index.html">← Kembali ke Menu Utama</a>
+  </main>
+
+  <!-- Script -->
+  <script>
+    function ambilProduk() {
+      return JSON.parse(localStorage.getItem("produkUMKM")) || [];
+    }
+
+    function formatRupiah(angka) {
+      return "Rp " + angka.toLocaleString("id-ID");
+    }
+
+    document.getElementById("simulasiForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const pengunjung = parseInt(jumlahPengunjung.value);
+      const tiket = parseInt(hargaTiket.value);
+      const sponsor = parseInt(danaSponsor.value);
+      const biaya = parseInt(biayaOperasional.value);
+
+      const pendapatanTiket = pengunjung * tiket;
+      const totalPendapatan = pendapatanTiket + sponsor;
+
+      const produkList = ambilProduk();
+      let totalOmzetUMKM = 0;
+
+      produkList.forEach(produk => {
+        const estimasiTerjual = Math.floor(pengunjung * 0.3);
+        totalOmzetUMKM += estimasiTerjual * produk.harga;
+      });
+
+      const hasilHTML = `
+        <p><strong>Pendapatan Tiket:</strong> ${formatRupiah(pendapatanTiket)}</p>
+        <p><strong>Dana Sponsor:</strong> ${formatRupiah(sponsor)}</p>
+        <p><strong>Total Pendapatan:</strong> ${formatRupiah(totalPendapatan)}</p>
+        <p><strong>Biaya Operasional:</strong> ${formatRupiah(biaya)}</p>
+        <p><strong>Estimasi Omzet UMKM:</strong> ${formatRupiah(totalOmzetUMKM)}</p>
+      `;
+
+      document.getElementById("hasilSimulasi").innerHTML = hasilHTML;
+    });
+  </script>
+
+</body>
+</html>
